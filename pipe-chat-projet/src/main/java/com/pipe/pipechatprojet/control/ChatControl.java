@@ -1,7 +1,7 @@
 package com.pipe.pipechatprojet.control;
 
 
-import com.pipe.pipechatprojet.control.modelo.Mensage;
+import com.pipe.pipechatprojet.control.modelo.Mensaje;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
@@ -15,15 +15,15 @@ public class ChatControl {
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     
-    @MessageMapping("/mensage")// /app/mensage
+    @MessageMapping("/mensaje")// /app/mensaje
     @SendTo("/chat/public")
-    public Mensage receivePublicMensage(@Payload Mensage mensage){
-        return mensage;
+    public Mensaje receivePublicMensaje(@Payload Mensaje mensaje){
+        return mensaje;
     }
     
     @MessageMapping("/private-mensage")
-    private Mensage receivePrivateMensage(@Payload Mensage mensage){
-        simpMessagingTemplate.convertAndSendToUser(mensage.getReceiverName(),"/private",mensage);// /user/cristian/private
-        return mensage;
+    private Mensaje receivePrivateMensaje(@Payload Mensaje mensaje){
+        simpMessagingTemplate.convertAndSendToUser(mensaje.getReceiverName(),"/private", mensaje);// /user/cristian/private
+        return mensaje;
     }
 }
