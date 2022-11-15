@@ -8,7 +8,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-
+//creacion de la clase mensajes
 public class Mensaje {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

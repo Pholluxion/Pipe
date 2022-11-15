@@ -11,7 +11,7 @@ import org.springframework.stereotype.Controller;
 
 @Controller
 public class ChatControl {
-    
+    //controlador de la clase mensajes
     @Autowired
     private SimpMessagingTemplate simpMessagingTemplate;
     
