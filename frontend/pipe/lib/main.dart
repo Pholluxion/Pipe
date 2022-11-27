@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pipe/src/core/settings/settings_controller.dart';
+
+import 'package:pipe/src/injectors/di_signup.dart' as di_signup;
+import 'package:pipe/src/injectors/di_login.dart' as di_login;
 
 import 'src/app.dart';
-import 'src/settings/settings_controller.dart';
-import 'src/settings/settings_service.dart';
 
-void main() async {
-  // Set up the SettingsController, which will glue user settings to multiple
-  // Flutter Widgets.
-  final settingsController = SettingsController(SettingsService());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await settingsController.init();
 
-  // Load the user's preferred theme while the splash screen is displayed.
-  // This prevents a sudden theme change when the app is first displayed.
-  await settingsController.loadSettings();
+  di_signup.init();
+  di_login.init();
 
-  // Run the app and pass in the SettingsController. The app listens to the
-  // SettingsController for changes, then passes it further down to the
-  // SettingsView.
-  runApp(MyApp(settingsController: settingsController));
+  runApp(const MyApp());
 }
