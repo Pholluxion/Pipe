@@ -14,14 +14,14 @@ class RegisterPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Hero(
-      tag: 'authPage',
+      tag: 'init',
       child: SafeArea(
         child: Scaffold(
           backgroundColor: PipeColor.kPipeBlack,
           body: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+              padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
               child: BlocListener<SignUpCubit, SignUpState>(
                 listener: (context, state) {
                   if (state.status.isSubmissionSuccess) {
@@ -186,7 +186,7 @@ class _RegisterBtn extends StatelessWidget {
             Navigator.popAndPushNamed(context, "login");
           },
           child: const Text(" Inicia sesión"),
-        )
+        ),
       ],
     );
   }

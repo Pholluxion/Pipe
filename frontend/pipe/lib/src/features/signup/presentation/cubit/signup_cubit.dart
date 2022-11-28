@@ -79,7 +79,6 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpFormSubmitted() async {
-    if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       final response = await di.get<RegisterWithEmailAndPassword>().call(

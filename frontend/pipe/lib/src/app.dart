@@ -47,7 +47,7 @@ class _MyAppState extends State<MyApp> {
         },
         initialRoute: _initPath(),
         theme: pipeTheme,
-        darkTheme: ThemeData.dark(),
+        darkTheme: pipeTheme,
         debugShowCheckedModeBanner: false,
       ),
     );

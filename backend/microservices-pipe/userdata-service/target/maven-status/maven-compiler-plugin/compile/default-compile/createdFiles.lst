@@ -1,0 +1,6 @@
+com/phollux/userdata/services/UserDataService.class
+com/phollux/userdata/controllers/UserController.class
+com/phollux/userdata/dtos/UserDto.class
+com/phollux/userdata/models/User.class
+com/phollux/userdata/UserServiceApplication.class
+com/phollux/userdata/repositories/UserDataRepository.class
