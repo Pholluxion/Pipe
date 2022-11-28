@@ -14,48 +14,46 @@ class LoginPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Hero(
-      tag: 'authPage',
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: PipeColor.kPipeBlack,
-          body: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.05),
-              child: BlocListener<LogInCubit, LogInState>(
-                listener: (context, state) {
-                  if (state.status.isSubmissionSuccess) {
-                    Navigator.popAndPushNamed(context, "home");
-                  } else if (state.status.isSubmissionFailure) {
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('¡Ocurrio un error!'),
-                        content: const Text(
-                            'Por favor verifica tus datos e intenta nuevamente.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => Navigator.pop(context, 'OK'),
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-                child: Column(
-                  children: const [
-                    PipeLogoTipo(h: 150.0),
-                    _LoginMessage(),
-                    HelpBtn(),
-                    _EmailTextFieldWidget(),
-                    _PasswordTextFieldWidget(),
-                    _RecoveryPasswordBtn(),
-                    _LogInBtn(),
-                    PipeDivider(),
-                    _RegisterBtn()
-                  ],
-                ),
+      tag: 'init',
+      child: Scaffold(
+        backgroundColor: PipeColor.kPipeBlack,
+        body: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
+            child: BlocListener<LogInCubit, LogInState>(
+              listener: (context, state) {
+                if (state.status.isSubmissionSuccess) {
+                  Navigator.popAndPushNamed(context, "home");
+                } else if (state.status.isSubmissionFailure) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('¡Ocurrio un error!'),
+                      content: const Text(
+                          'Por favor verifica tus datos e intenta nuevamente.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => Navigator.pop(context, 'OK'),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+              child: Column(
+                children: const [
+                  PipeLogoTipo(h: 150.0),
+                  _LoginMessage(),
+                  HelpBtn(),
+                  _EmailTextFieldWidget(),
+                  _PasswordTextFieldWidget(),
+                  _RecoveryPasswordBtn(),
+                  _LogInBtn(),
+                  PipeDivider(),
+                  _RegisterBtn()
+                ],
               ),
             ),
           ),

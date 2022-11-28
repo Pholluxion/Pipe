@@ -20,6 +20,7 @@ class ConfirmPasswordTextField extends StatefulWidget {
 
 class _ConfirmPasswordTextFieldState extends State<ConfirmPasswordTextField> {
   final passwordController = TextEditingController();
+  bool _isOscure = true;
 
   @override
   void dispose() {
@@ -36,7 +37,7 @@ class _ConfirmPasswordTextFieldState extends State<ConfirmPasswordTextField> {
         child: TextField(
           onChanged: widget.onChanged,
           controller: passwordController,
-          obscureText: true,
+          obscureText: _isOscure,
           keyboardType: TextInputType.visiblePassword,
           style: TextStyle(color: PipeColor.kPipeWhite),
           decoration: _inputDecorationPasswordConfirm(widget.errorText),
@@ -60,9 +61,15 @@ class _ConfirmPasswordTextFieldState extends State<ConfirmPasswordTextField> {
       hintText: "Confirmar contraseña",
       hintStyle: TextStyle(color: PipeColor.kPipeWhite),
       labelStyle: TextStyle(color: PipeColor.kPipeWhite),
-      suffixIcon: Icon(
-        Icons.hide_source,
+      suffixIcon: IconButton(
         color: PipeColor.kPipeWhite,
+        icon: const Icon(
+          Icons.hide_source,
+        ),
+        onPressed: () {
+          _isOscure = !_isOscure;
+          setState(() {});
+        },
       ),
       suffixIconColor: PipeColor.kPipeWhite,
       focusColor: PipeColor.kPipeWhite,
