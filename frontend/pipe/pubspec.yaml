@@ -24,6 +24,8 @@ dependencies:
   logger: ^1.1.0
   formz: ^0.4.1
   shared_preferences: ^2.0.15
+  jitsi_meet: ^4.0.0
+
     
 dev_dependencies:
   flutter_test:
@@ -36,8 +38,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Enable generation of localized Strings from arb files.
-  generate: true
+
 
   assets:
     # Add assets from the images directory to the application.

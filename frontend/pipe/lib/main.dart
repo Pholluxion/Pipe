@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pipe/src/bloc_observer.dart';
 import 'package:pipe/src/core/settings/settings_controller.dart';
 
-import 'package:pipe/src/injectors/di_signup.dart' as di_signup;
-import 'package:pipe/src/injectors/di_login.dart' as di_login;
+import 'package:pipe/src/di.dart' as di_auth;
 
 import 'src/app.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await settingsController.init();
+  Bloc.observer = AppBlocObserver();
 
-  di_signup.init();
-  di_login.init();
+  di_auth.init();
 
   runApp(const MyApp());
 }
