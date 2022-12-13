@@ -11,6 +11,12 @@ final pipeTheme = ThemeData(
   backgroundColor: PipeColor.kPipeBlack,
   highlightColor: PipeColor.kPipeGreen,
   indicatorColor: PipeColor.kPipeGreen,
+  appBarTheme: AppBarTheme(
+    color: PipeColor.kPipeWhite,
+    iconTheme: IconThemeData(
+      color: PipeColor.kPipeGreen,
+    ),
+  ),
   colorScheme: ThemeData().colorScheme.copyWith(
         primary: PipeColor.kPipeGreen,
         secondary: PipeColor.kPipeWhite,

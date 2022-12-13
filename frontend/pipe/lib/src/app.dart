@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pipe/src/core/themes/pipe_theme.dart';
 
+import 'core/themes/pipe_theme.dart';
 import 'core/settings/settings_controller.dart';
-
-import 'features/onboarding/views/onboarding_primary_view.dart';
-import 'features/onboarding/views/onboarding_second_view.dart';
-import 'features/login/presentation/cubit/login_cubit.dart';
-import 'features/login/presentation/pages/login_page.dart';
-import 'features/signup/presentation/cubit/signup_cubit.dart';
-import 'features/signup/presentation/pages/signup_page.dart';
-import 'features/home/presentation/pages/home_page.dart';
+import 'presentation/bloc/home/home_cubit.dart';
+import 'presentation/bloc/login/login_cubit.dart';
+import 'presentation/bloc/signup/signup_cubit.dart';
+import 'presentation/pages/home_page.dart';
+import 'presentation/pages/login_page.dart';
+import 'presentation/pages/signup_page.dart';
+import 'presentation/widgets/widget.dart';
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -35,7 +34,12 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => SignUpCubit()),
-        BlocProvider(create: (context) => LogInCubit()),
+        BlocProvider(create: (context) => HomeCubit()),
+        BlocProvider(
+          create: (context) => LogInCubit(
+            context.read<HomeCubit>(),
+          ),
+        ),
       ],
       child: MaterialApp(
         routes: {
@@ -56,10 +60,8 @@ class _MyAppState extends State<MyApp> {
   String _initPath() {
     if (isOnboardingActive) {
       return 'onboarding';
-    } else if (isUserActive.isEmpty) {
-      return 'login';
     } else {
-      return 'home';
+      return 'login';
     }
   }
 }
