@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JpbDataSourceConfig">
+    <data-sources>
+      <data-source id="6de6b7d2-7356-4347-97bd-e78321118b3c" name="pipe" url="jdbc:postgresql://localhost:5432/pipe" driverClass="org.postgresql.Driver" />
+    </data-sources>
+  </component>
+</project>

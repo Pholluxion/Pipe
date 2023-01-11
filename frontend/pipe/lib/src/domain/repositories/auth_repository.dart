@@ -4,4 +4,5 @@ import '../entities/user_response_entity.dart';
 abstract class AuthRepository {
   Future<String> register(UserEntity user);
   Future<UserResponseEntity> login(UserEntity user);
+  Future<String> generateToken();
 }

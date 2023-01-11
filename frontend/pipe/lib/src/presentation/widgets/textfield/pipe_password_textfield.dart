@@ -8,10 +8,12 @@ class PasswordTextField extends StatefulWidget {
     Key? key,
     this.onChanged,
     required this.errorText,
+    this.password,
   }) : super(key: key);
 
   final void Function(String)? onChanged;
   final Password errorText;
+  final String? password;
 
   @override
   State<PasswordTextField> createState() => _PasswordTextFieldState();
@@ -20,6 +22,11 @@ class PasswordTextField extends StatefulWidget {
 class _PasswordTextFieldState extends State<PasswordTextField> {
   final passwordController = TextEditingController();
   bool _isOscure = true;
+  @override
+  void initState() {
+    passwordController.text = widget.password ?? '';
+    super.initState();
+  }
 
   @override
   void dispose() {

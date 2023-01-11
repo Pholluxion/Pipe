@@ -17,4 +17,9 @@ class AuthRepositoryImpl implements AuthRepository {
   Future<UserResponseEntity> login(UserEntity user) async {
     return await authRemoteDataSource.login(user);
   }
+
+  @override
+  Future<String> generateToken() async {
+    return await authRemoteDataSource.generateToken();
+  }
 }

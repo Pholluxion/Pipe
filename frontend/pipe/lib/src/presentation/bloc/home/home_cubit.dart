@@ -8,9 +8,15 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(const HomeState());
 
-  void loadUser(UserResponseEntity userResponseEntity) {
+  void loadUser(
+    UserResponseEntity userResponseEntity,
+    String token,
+  ) {
     emit(
-      state.copyWith(userResponseEntity: userResponseEntity),
+      state.copyWith(
+        userResponseEntity: userResponseEntity,
+        token: token,
+      ),
     );
   }
 

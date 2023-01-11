@@ -14,6 +14,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+
+import java.util.*;
+
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
+
 import java.util.Optional;
 
 @Service
@@ -48,6 +54,8 @@ public class AuthServiceImpl implements AuthService {
                 UserDto userData = webClient.get().uri(url).retrieve().bodyToMono(UserDto.class).block();
                 authResponseDto.setUserDto(userData);
 
+
+
                 return authResponseDto;
             } else {
                 throw new PasswordNotMatchException("incorrect password or email");
@@ -56,7 +64,25 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception ex) {
             throw new UserNotFoundException("User not found EX");
         }
+
+
     }
+    @Override
+    public String generateToken() {
+
+        String VIDEOSDK_API_KEY = "";
+        String VIDEOSDK_SECRET_KEY = "";
+
+        Map<String, Object> payload = new HashMap<>();
+
+        payload.put("apikey", VIDEOSDK_API_KEY);
+        payload.put("permissions", new String[]{"allow_join", "allow_mod"});
+
+        return Jwts.builder().setClaims(payload)
+                .setExpiration(new Date(System.currentTimeMillis() + 86400 * 1000))
+                .signWith(SignatureAlgorithm.HS256, VIDEOSDK_SECRET_KEY.getBytes()).compact();
+    }
+
 
     @Override
     public AuthResponseDto register(RegisterDto registerDto) {
@@ -80,8 +106,8 @@ public class AuthServiceImpl implements AuthService {
         userDto.setName(registerDto.getUsername());
         userDto.setEmail(registerDto.getEmail());
 
-        UserDto userData = webClient.post().uri(url).bodyValue(userDto) .retrieve().bodyToMono(UserDto.class).block();
-        
+        UserDto userData = webClient.post().uri(url).bodyValue(userDto).retrieve().bodyToMono(UserDto.class).block();
+
         authResponseDto.setUserDto(userData);
 
         return authResponseDto;

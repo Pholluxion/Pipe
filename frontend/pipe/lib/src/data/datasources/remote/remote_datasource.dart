@@ -9,6 +9,7 @@ import 'auth_api.dart';
 abstract class RemoteDataSource {
   Future<String> register(UserEntity user);
   Future<UserResponseEntity> login(UserEntity user);
+  Future<String> generateToken();
 }
 
 class AuthRemoteDataSource implements RemoteDataSource {
@@ -45,6 +46,17 @@ class AuthRemoteDataSource implements RemoteDataSource {
     try {
       final client = RestClient(dio);
       return await client.loginUser(user);
+    } catch (e) {
+      throw Exception("Ocurrio un problema");
+    }
+  }
+
+  @override
+  Future<String> generateToken() async {
+    try {
+      final client = RestClient(dio);
+      final response = await client.generateToken();
+      return response.response.headers.map['token']?.first ?? '';
     } catch (e) {
       throw Exception("Ocurrio un problema");
     }

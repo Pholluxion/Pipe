@@ -10,6 +10,7 @@ class UserDataModel extends UserResponseEntity {
   const UserDataModel({
     int? status,
     String? message,
+    String? token,
     UserDto? userDto,
   }) : super(
           message: message,
