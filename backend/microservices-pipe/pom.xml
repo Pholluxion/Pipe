@@ -11,6 +11,8 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
+    
+
     <groupId>com.phollux</groupId>
     <artifactId>microservices-pipe</artifactId>
     <packaging>pom</packaging>

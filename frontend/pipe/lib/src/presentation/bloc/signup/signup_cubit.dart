@@ -78,6 +78,9 @@ class SignUpCubit extends Cubit<SignUpState> {
   }
 
   Future<void> signUpFormSubmitted() async {
+    if (state.confirmedPassword.value.isEmpty) {
+      emit(state.copyWith(status: FormzStatus.invalid));
+    }
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
 
     try {

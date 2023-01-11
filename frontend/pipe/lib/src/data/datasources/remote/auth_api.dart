@@ -16,4 +16,7 @@ abstract class RestClient {
 
   @POST("/login")
   Future<UserDataModel> loginUser(@Body() UserEntity loginUserEntity);
+
+  @GET("/token")
+  Future<HttpResponse<String>> generateToken();
 }

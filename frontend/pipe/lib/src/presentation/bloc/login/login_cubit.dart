@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pipe/src/domain/usecases/generate_token_usecase.dart';
 
 import '../../../core/settings/settings_controller.dart';
 import '../../../core/utils/validations/email_validation.dart';
@@ -16,7 +17,7 @@ import '../home/home_cubit.dart';
 part 'login_state.dart';
 
 class LogInCubit extends Cubit<LogInState> {
-  LogInCubit(this.homeCubit) : super(const LogInState());
+  LogInCubit({required this.homeCubit}) : super(const LogInState());
 
   final HomeCubit homeCubit;
 
@@ -48,8 +49,12 @@ class LogInCubit extends Cubit<LogInState> {
   }
 
   Future<void> logInFormSubmitted() async {
-    // if (!state.status.isValidated) return;
+    if (state.email.value.isEmpty || state.password.value.isEmpty) {
+      emit(state.copyWith(status: FormzStatus.invalid));
+    }
+
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
+
     try {
       final response = await di.get<LoginWithEmailAndPassword>().call(
             UserModel(
@@ -58,14 +63,20 @@ class LogInCubit extends Cubit<LogInState> {
               password: state.password.value,
             ),
           );
-      emit(
-        state.copyWith(
-          status: FormzStatus.submissionSuccess,
-          username: response.toString(),
-          userResponseEntity: response,
-        ),
-      );
-      homeCubit.loadUser(response);
+      final token = await di.get<GenerateToken>().call();
+
+      Future.delayed(const Duration(seconds: 5)).then((value) {
+        emit(
+          state.copyWith(
+            status: FormzStatus.submissionSuccess,
+            username: response.toString(),
+            userResponseEntity: response,
+          ),
+        );
+      });
+
+      homeCubit.loadUser(response, token);
+
       settingsController.saveUser(json.encode(response));
     } catch (_) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));

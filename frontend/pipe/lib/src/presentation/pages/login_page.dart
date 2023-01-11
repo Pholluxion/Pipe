@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pipe/src/data/services/navigation_service.dart';
+import 'package:pipe/src/di.dart';
+import 'package:pipe/src/presentation/routes.dart' as routes;
 
 import '../../core/utils/colors.dart';
 import '../bloc/login/login_cubit.dart';
@@ -23,8 +26,7 @@ class LoginPage extends StatelessWidget {
             child: BlocListener<LogInCubit, LogInState>(
               listener: (context, state) {
                 if (state.status.isSubmissionSuccess) {
-                  Navigator.popUntil(context, ModalRoute.withName('home'));
-                  Navigator.pushNamed(context, 'home');
+                  di<NavigationService>().popAndNavigateTo(routes.kHomeRoute);
                 } else if (state.status.isSubmissionFailure) {
                   _showErrorDialog(context);
                 }
@@ -58,7 +60,7 @@ class LoginPage extends StatelessWidget {
             const Text('Por favor verifica tus datos e intenta nuevamente.'),
         actions: <Widget>[
           TextButton(
-            onPressed: () => Navigator.pop(context, 'OK'),
+            onPressed: () => di<NavigationService>().goBack(),
             child: const Text('OK'),
           ),
         ],
@@ -74,9 +76,22 @@ class _LogInBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GreenBigButton(
-      label: 'Iniciar sesión',
-      onPressed: () => context.read<LogInCubit>().logInFormSubmitted(),
+    return BlocBuilder<LogInCubit, LogInState>(
+      builder: (context, state) {
+        if (state.status == FormzStatus.submissionInProgress) {
+          return GreenBigButton(
+            loading: true,
+            label: 'Iniciar sesión',
+            onPressed: () => context.read<LogInCubit>().logInFormSubmitted(),
+          );
+        } else {
+          return GreenBigButton(
+            loading: false,
+            label: 'Iniciar sesión',
+            onPressed: () => context.read<LogInCubit>().logInFormSubmitted(),
+          );
+        }
+      },
     );
   }
 }
@@ -99,7 +114,7 @@ class _RegisterBtn extends StatelessWidget {
           ),
           TextButton(
             onPressed: () {
-              Navigator.popAndPushNamed(context, "register");
+              di<NavigationService>().navigateTo(routes.kRegisterRoute);
             },
             child: const Text(" Registrate ahora"),
           )
@@ -167,6 +182,7 @@ class _EmailTextFieldWidget extends StatelessWidget {
     return BlocBuilder<LogInCubit, LogInState>(
       builder: (context, state) {
         return EmailTextField(
+          email: state.email.value,
           errorText: state.email,
           onChanged: (email) => context.read<LogInCubit>().emailChanged(email),
         );
@@ -185,6 +201,7 @@ class _PasswordTextFieldWidget extends StatelessWidget {
     return BlocBuilder<LogInCubit, LogInState>(
       builder: (context, state) {
         return PasswordTextField(
+          password: state.password.value,
           errorText: state.password,
           onChanged: (password) =>
               context.read<LogInCubit>().passwordChanged(password),

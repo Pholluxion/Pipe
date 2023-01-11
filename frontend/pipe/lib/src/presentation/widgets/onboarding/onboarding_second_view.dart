@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pipe/src/data/services/navigation_service.dart';
+import 'package:pipe/src/di.dart';
+import 'package:pipe/src/presentation/routes.dart' as routes;
 
 import '../../../core/utils/colors.dart';
 import '../widget.dart';
@@ -14,24 +17,24 @@ class OnboardingSecondPage extends StatelessWidget {
       tag: 'init',
       child: Scaffold(
         backgroundColor: PipeColor.kPipeBlack,
-        body: Center(
-          child: SingleChildScrollView(
-            child: SizedBox(
-              width: size.width,
-              height: (orientation == Orientation.portrait)
-                  ? size.height
-                  : size.height * 2,
-              child: Column(
-                mainAxisAlignment: (orientation != Orientation.portrait)
-                    ? MainAxisAlignment.start
-                    : MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    height: 300,
-                    width: double.infinity,
+        body: SingleChildScrollView(
+          child: SizedBox(
+            width: size.width,
+            height: (orientation == Orientation.portrait)
+                ? size.height
+                : size.height * 2,
+            child: Column(
+              mainAxisAlignment: (orientation != Orientation.portrait)
+                  ? MainAxisAlignment.start
+                  : MainAxisAlignment.spaceEvenly,
+              children: [
+                Flexible(
+                  child: SizedBox(
                     child: Image.asset("assets/images/pipe_logo_named.png"),
                   ),
-                  Padding(
+                ),
+                Flexible(
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: Container(
                       constraints: const BoxConstraints(
@@ -50,7 +53,9 @@ class OnboardingSecondPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Padding(
+                ),
+                Flexible(
+                  child: Padding(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 24.0, vertical: 48.0),
                     child: Container(
@@ -70,27 +75,29 @@ class OnboardingSecondPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Container(
+                ),
+                Flexible(
+                  child: Container(
                     constraints: const BoxConstraints(maxWidth: 400.0),
                     alignment: Alignment.center,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         GreenSmallButton(
-                          onPressed: () =>
-                              Navigator.popAndPushNamed(context, "register"),
+                          onPressed: () => di<NavigationService>()
+                              .popAndNavigateTo(routes.kRegisterRoute),
                           label: 'Registro',
                         ),
                         WhiteSmallButton(
-                          onPressed: () =>
-                              Navigator.popAndPushNamed(context, "login"),
+                          onPressed: () => di<NavigationService>()
+                              .popAndNavigateTo(routes.kLoginRoute),
                           label: 'Iniciar sesión',
                         )
                       ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

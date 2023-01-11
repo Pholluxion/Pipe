@@ -24,7 +24,13 @@ dependencies:
   logger: ^1.1.0
   formz: ^0.4.1
   shared_preferences: ^2.0.15
-  jitsi_meet: ^4.0.0
+  videosdk: ^1.0.9
+  http: ^0.13.5
+  flutter_dotenv: ^5.0.2
+  camera: ^0.10.1
+  date_time_format: ^2.0.1
+  touch_ripple_effect: ^2.2.4
+  lottie: ^2.1.0
 
     
 dev_dependencies:
@@ -43,4 +49,6 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/lotties/
     - assets/fonts/static/
+    - .env

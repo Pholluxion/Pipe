@@ -38,10 +38,10 @@ class PipeNavBar extends StatelessWidget {
               icon: Icon(Icons.person),
               label: 'Profile',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.message),
-              label: 'Messages',
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.message),
+            //   label: 'Messages',
+            // ),
           ],
         );
       },

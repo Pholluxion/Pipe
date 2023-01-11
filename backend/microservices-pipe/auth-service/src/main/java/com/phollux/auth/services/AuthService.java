@@ -8,5 +8,5 @@ public interface AuthService {
 
     public AuthResponseDto login(LoginDto loginDto);
     public AuthResponseDto register(RegisterDto loginDto);
-
+    public String generateToken();
 }

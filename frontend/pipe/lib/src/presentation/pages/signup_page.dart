@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:pipe/src/di.dart';
+import 'package:pipe/src/presentation/routes.dart' as routes;
 
 import '../../core/utils/colors.dart';
+import '../../data/services/navigation_service.dart';
 import '../bloc/signup/signup_cubit.dart';
 import '../widgets/widget.dart';
 
@@ -31,8 +34,8 @@ class RegisterPage extends StatelessWidget {
                         content: const Text('Ya puedes iniciar sesión'),
                         actions: <Widget>[
                           TextButton(
-                            onPressed: () =>
-                                Navigator.popAndPushNamed(context, "login"),
+                            onPressed: () => di<NavigationService>()
+                                .popAndNavigateTo(routes.kLoginRoute),
                             child: const Text('OK'),
                           ),
                         ],
@@ -47,7 +50,7 @@ class RegisterPage extends StatelessWidget {
                             'Por favor verifica tus datos e intenta nuevamente.'),
                         actions: <Widget>[
                           TextButton(
-                            onPressed: () => Navigator.pop(context, 'OK'),
+                            onPressed: () => di<NavigationService>().goBack(),
                             child: const Text('OK'),
                           ),
                         ],
@@ -193,9 +196,8 @@ class _RegisterBtn extends StatelessWidget {
           ),
         ),
         TextButton(
-          onPressed: () {
-            Navigator.popAndPushNamed(context, "login");
-          },
+          onPressed: () =>
+              di<NavigationService>().popAndNavigateTo(routes.kLoginRoute),
           child: const Text(" Inicia sesión"),
         ),
       ],

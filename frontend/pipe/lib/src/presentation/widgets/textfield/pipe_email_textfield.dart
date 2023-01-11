@@ -8,10 +8,12 @@ class EmailTextField extends StatefulWidget {
     Key? key,
     this.onChanged,
     required this.errorText,
+    this.email,
   }) : super(key: key);
 
   final void Function(String)? onChanged;
   final Email errorText;
+  final String? email;
 
   @override
   State<EmailTextField> createState() => _EmailTextFieldState();
@@ -19,6 +21,11 @@ class EmailTextField extends StatefulWidget {
 
 class _EmailTextFieldState extends State<EmailTextField> {
   final emailController = TextEditingController();
+  @override
+  void initState() {
+    emailController.text = widget.email ?? '';
+    super.initState();
+  }
 
   @override
   void dispose() {
