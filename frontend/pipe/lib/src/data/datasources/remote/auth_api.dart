@@ -7,7 +7,7 @@ import '../../models/user_data_model.dart';
 
 part 'auth_api.g.dart';
 
-@RestApi(baseUrl: "http://$kIpConfig:8081/api/auth")
+@RestApi(baseUrl: "http://$kIpConfig/api/auth")
 abstract class RestClient {
   factory RestClient(Dio dio, {String baseUrl}) = _RestClient;
 
