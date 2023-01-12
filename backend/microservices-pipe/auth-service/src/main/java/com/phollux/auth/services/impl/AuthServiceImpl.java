@@ -26,12 +26,12 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService {
 
     private final UserRepository userRepository;
-    private final WebClient webClient;
+    private final WebClient.Builder webClientBuilder;
 
     @Autowired
-    public AuthServiceImpl(UserRepository userRepository, WebClient webClient) {
+    public AuthServiceImpl(UserRepository userRepository, WebClient.Builder webClientBuilder) {
         this.userRepository = userRepository;
-        this.webClient = webClient;
+        this.webClientBuilder = webClientBuilder;
     }
 
 
@@ -49,9 +49,9 @@ public class AuthServiceImpl implements AuthService {
                 authResponseDto.setMessage("Bienvenido");
                 authResponseDto.setStatus(HttpStatus.OK.value());
 
-                String url = "http://localhost:8080/api/userdata/get?email=" + loginDto.getEmail().toString();
+                String url = "http://userdata-service/api/userdata/get?email=" + loginDto.getEmail().toString();
 
-                UserDto userData = webClient.get().uri(url).retrieve().bodyToMono(UserDto.class).block();
+                UserDto userData = webClientBuilder.build().get().uri(url).retrieve().bodyToMono(UserDto.class).block();
                 authResponseDto.setUserDto(userData);
 
 
@@ -70,8 +70,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String generateToken() {
 
-        String VIDEOSDK_API_KEY = "";
-        String VIDEOSDK_SECRET_KEY = "";
+        String VIDEOSDK_API_KEY = "a314285a-aae7-477d-b7b1-2d1e086e375f";
+        String VIDEOSDK_SECRET_KEY = "669d1ff7109a20b6d723a8265babf5457cb793640425385286165481c5194c9b";
 
         Map<String, Object> payload = new HashMap<>();
 
@@ -99,14 +99,14 @@ public class AuthServiceImpl implements AuthService {
         authResponseDto.setMessage("Registered");
         authResponseDto.setStatus(HttpStatus.CREATED.value());
 
-        String url = "http://localhost:8080/api/userdata/save";
+        String url = "http://userdata-service/api/userdata/save";
 
         UserDto userDto = new UserDto();
 
         userDto.setName(registerDto.getUsername());
         userDto.setEmail(registerDto.getEmail());
 
-        UserDto userData = webClient.post().uri(url).bodyValue(userDto).retrieve().bodyToMono(UserDto.class).block();
+        UserDto userData = webClientBuilder.build().post().uri(url).bodyValue(userDto).retrieve().bodyToMono(UserDto.class).block();
 
         authResponseDto.setUserDto(userData);
 
