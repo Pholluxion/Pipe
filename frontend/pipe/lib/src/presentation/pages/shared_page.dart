@@ -104,8 +104,8 @@ class _ConferenseScreenShareViewState extends State<ConferenseScreenShareView> {
         : Container();
   }
 
-  void setMeetingListeners(Room _meeting) {
-    _meeting.localParticipant.on(Events.streamEnabled, (Stream stream) {
+  void setMeetingListeners(Room meeting) {
+    meeting.localParticipant.on(Events.streamEnabled, (Stream stream) {
       if (stream.kind == "share") {
         setState(() {
           isLocalScreenShare = true;
@@ -113,7 +113,7 @@ class _ConferenseScreenShareViewState extends State<ConferenseScreenShareView> {
         });
       }
     });
-    _meeting.localParticipant.on(Events.streamDisabled, (Stream stream) {
+    meeting.localParticipant.on(Events.streamDisabled, (Stream stream) {
       if (stream.kind == "share") {
         setState(() {
           isLocalScreenShare = false;
@@ -122,23 +122,23 @@ class _ConferenseScreenShareViewState extends State<ConferenseScreenShareView> {
       }
     });
 
-    _meeting.participants.forEach((key, value) {
+    meeting.participants.forEach((key, value) {
       addParticipantListener(value);
     });
     // Called when presenter changes
-    _meeting.on(Events.presenterChanged, (_presenterId) {
-      Participant? presenterParticipant = _presenterId != null
+    meeting.on(Events.presenterChanged, (presenterId) {
+      Participant? presenterParticipant = presenterId != null
           ? widget.meeting.participants.values
-              .firstWhere((element) => element.id == _presenterId)
+              .firstWhere((element) => element.id == presenterId)
           : null;
 
       setState(() {
         _presenterParticipant = presenterParticipant;
-        presenterId = _presenterId;
+        presenterId = presenterId;
       });
     });
 
-    _meeting.on(Events.participantJoined, (Participant participant) {
+    meeting.on(Events.participantJoined, (Participant participant) {
       log("${participant.displayName} JOINED");
       addParticipantListener(participant);
     });

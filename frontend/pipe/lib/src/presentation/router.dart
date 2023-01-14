@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pipe/src/presentation/pages/conference_page.dart';
+import 'package:pipe/src/presentation/pages/join_page.dart';
 import 'package:pipe/src/presentation/pages/loading_page.dart';
 import 'package:pipe/src/presentation/routes.dart' as routes;
 import 'package:pipe/src/presentation/pages/home_page.dart';
@@ -25,6 +26,11 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case routes.kNewMettingPage:
       return MaterialPageRoute<void>(
         builder: (BuildContext context) => const NewMettingPage(),
+        fullscreenDialog: true,
+      );
+    case routes.kJoinPage:
+      return MaterialPageRoute<void>(
+        builder: (BuildContext context) => const JoinPage(),
         fullscreenDialog: true,
       );
     case routes.kLoadingPage:

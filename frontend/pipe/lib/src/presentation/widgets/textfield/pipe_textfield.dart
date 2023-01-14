@@ -4,9 +4,18 @@ import '../../../core/utils/colors.dart';
 import 'pipe_textfield_style.dart';
 
 class PipeTextField extends StatefulWidget {
-  const PipeTextField({Key? key, this.onChanged}) : super(key: key);
+  const PipeTextField({
+    Key? key,
+    this.onChanged,
+    this.hintText,
+    this.isEnable,
+    this.value,
+  }) : super(key: key);
 
   final void Function(String)? onChanged;
+  final String? hintText;
+  final bool? isEnable;
+  final String? value;
 
   @override
   State<PipeTextField> createState() => _PipeTextFieldState();
@@ -14,6 +23,12 @@ class PipeTextField extends StatefulWidget {
 
 class _PipeTextFieldState extends State<PipeTextField> {
   final pipeController = TextEditingController();
+
+  @override
+  void initState() {
+    pipeController.text = widget.value ?? '';
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -28,12 +43,14 @@ class _PipeTextFieldState extends State<PipeTextField> {
       child: Container(
         constraints: const BoxConstraints(maxWidth: 350.0),
         child: TextField(
+          enabled: widget.isEnable ?? true,
           onChanged: widget.onChanged,
           controller: pipeController,
-          keyboardType: TextInputType.emailAddress,
+          keyboardType: TextInputType.text,
           cursorColor: PipeColor.kPipeGreen,
           style: TextStyle(color: PipeColor.kPipeWhite),
-          decoration: inputDecoration,
+          decoration:
+              PipeInputDecoration(hintText: widget.hintText).inputDecoration,
         ),
       ),
     );

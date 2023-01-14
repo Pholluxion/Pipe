@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
+import 'package:pipe/src/data/datasources/remote/userdata_api.dart';
+import 'package:pipe/src/data/models/user_data_model.dart';
 
 import '../../../core/exceptions/user_not_found_ex.dart';
+import '../../../domain/entities/user_data_entity.dart';
 import '../../../domain/entities/user_entity.dart';
 import '../../../domain/entities/user_response_entity.dart';
 import 'auth_api.dart';
@@ -10,6 +13,7 @@ abstract class RemoteDataSource {
   Future<String> register(UserEntity user);
   Future<UserResponseEntity> login(UserEntity user);
   Future<String> generateToken();
+  Future<UserDto> updateUserData(UserDataEntity userEntity);
 }
 
 class AuthRemoteDataSource implements RemoteDataSource {
@@ -36,8 +40,8 @@ class AuthRemoteDataSource implements RemoteDataSource {
         }
       });
       return data;
-    } catch (_) {
-      throw Exception("Ocurrio un problema");
+    } catch (e) {
+      throw Exception("Ocurrio un problema: $e");
     }
   }
 
@@ -47,7 +51,7 @@ class AuthRemoteDataSource implements RemoteDataSource {
       final client = RestClient(dio);
       return await client.loginUser(user);
     } catch (e) {
-      throw Exception("Ocurrio un problema");
+      throw Exception("Ocurrio un problema: $e");
     }
   }
 
@@ -58,7 +62,18 @@ class AuthRemoteDataSource implements RemoteDataSource {
       final response = await client.generateToken();
       return response.response.headers.map['token']?.first ?? '';
     } catch (e) {
-      throw Exception("Ocurrio un problema");
+      throw Exception("Ocurrio un problema: $e");
+    }
+  }
+
+  @override
+  Future<UserDto> updateUserData(UserDataEntity userEntity) async {
+    try {
+      final client = UserDataAPi(dio);
+
+      return await client.updateUser(userEntity);
+    } catch (e) {
+      throw Exception("Ocurrio un problema: $e");
     }
   }
 }

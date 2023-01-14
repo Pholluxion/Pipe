@@ -1,3 +1,6 @@
+import 'package:pipe/src/data/models/user_data_model.dart';
+
+import '../../domain/entities/user_data_entity.dart';
 import '../../domain/entities/user_entity.dart';
 import '../../domain/entities/user_response_entity.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -21,5 +24,10 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<String> generateToken() async {
     return await authRemoteDataSource.generateToken();
+  }
+
+  @override
+  Future<UserDto> updateUserData(UserDataEntity user) async {
+    return await authRemoteDataSource.updateUserData(user);
   }
 }

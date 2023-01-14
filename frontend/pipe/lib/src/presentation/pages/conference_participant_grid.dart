@@ -68,9 +68,9 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
     );
   }
 
-  void setMeetingListeners(Room _meeting) {
+  void setMeetingListeners(Room meeting) {
     // Called when participant joined meeting
-    _meeting.on(
+    meeting.on(
       Events.participantJoined,
       (Participant participant) {
         final newParticipants = participants;
@@ -83,7 +83,7 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
     );
 
     // Called when participant left meeting
-    _meeting.on(
+    meeting.on(
       Events.participantLeft,
       (participantId) {
         final newParticipants = participants;
@@ -96,27 +96,25 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
       },
     );
 
-    _meeting.on(
+    meeting.on(
       Events.speakerChanged,
-      (_activeSpeakerId) {
+      (activeSpeakerId) {
         setState(() {
-          activeSpeakerId = _activeSpeakerId;
+          activeSpeakerId = activeSpeakerId;
           updateOnScreenParticipants();
         });
       },
     );
 
-    _meeting.on(Events.presenterChanged, (_presenterId) {
+    meeting.on(Events.presenterChanged, (presenterId) {
       setState(() {
-        presenterId = _presenterId;
-        numberOfMaxOnScreenParticipants = _presenterId != null ? 2 : 6;
+        presenterId = presenterId;
+        numberOfMaxOnScreenParticipants = presenterId != null ? 2 : 6;
         updateOnScreenParticipants();
       });
     });
 
-    ;
-
-    _meeting.localParticipant.on(Events.streamEnabled, (Stream stream) {
+    meeting.localParticipant.on(Events.streamEnabled, (Stream stream) {
       if (stream.kind == "share") {
         setState(() {
           numberOfMaxOnScreenParticipants = 2;
@@ -124,7 +122,7 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
         });
       }
     });
-    _meeting.localParticipant.on(Events.streamDisabled, (Stream stream) {
+    meeting.localParticipant.on(Events.streamDisabled, (Stream stream) {
       if (stream.kind == "share") {
         setState(() {
           numberOfMaxOnScreenParticipants = 6;

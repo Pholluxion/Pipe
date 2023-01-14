@@ -7,7 +7,6 @@ import '../../data/services/navigation_service.dart';
 import '../bloc/home/home_cubit.dart';
 
 import '../bloc/login/login_cubit.dart';
-import 'message_page.dart';
 import 'profile_page.dart';
 import 'stream_page.dart';
 
@@ -26,10 +25,8 @@ class HomePage extends StatelessWidget {
             return StreamPage(
               token: state.token,
             );
-          } else if (state.index == 1) {
-            return const ProfilePage();
           } else {
-            return const MessagePage();
+            return const ProfilePage();
           }
         },
       ),

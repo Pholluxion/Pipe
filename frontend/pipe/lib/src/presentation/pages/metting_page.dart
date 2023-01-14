@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,6 +22,7 @@ class NewMettingPage extends StatefulWidget {
 class _NewMettingPageState extends State<NewMettingPage> {
   @override
   void initState() {
+    log('NEW MET PAGE');
     di<CameraBloc>().add(const InitCameraEvent(0));
     super.initState();
   }
@@ -155,7 +158,13 @@ class _NewMettingPageState extends State<NewMettingPage> {
                   key: const Key('create_room'),
                   onPressed: () async {
                     di<ActionsBloc>().add(CreateRoomEvent());
-                    di<NavigationService>().navigateTo(routes.kConferencePage);
+
+                    if (state.roomId.isNotEmpty) {
+                      di<NavigationService>()
+                          .popAndNavigateTo(routes.kConferencePage);
+                    } else {
+                      return;
+                    }
                   },
                   child: Icon(
                     Icons.video_settings,

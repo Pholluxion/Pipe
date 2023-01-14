@@ -6,3 +6,4 @@ const String kHomeRoute = "home";
 const String kNewMettingPage = 'newMetting';
 const String kLoadingPage = 'loading';
 const String kConferencePage = 'conference';
+const String kJoinPage = 'joinMetting';

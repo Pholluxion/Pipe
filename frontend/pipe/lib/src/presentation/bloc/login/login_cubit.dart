@@ -78,7 +78,7 @@ class LogInCubit extends Cubit<LogInState> {
       homeCubit.loadUser(response, token);
 
       settingsController.saveUser(json.encode(response));
-    } catch (_) {
+    } catch (e) {
       emit(state.copyWith(status: FormzStatus.submissionFailure));
     }
   }

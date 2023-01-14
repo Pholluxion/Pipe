@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pipe/src/core/utils/colors.dart';
+import 'package:pipe/src/data/services/navigation_service.dart';
 import 'package:pipe/src/di.dart';
 import 'package:pipe/src/presentation/pages/loading_page.dart';
+import 'package:pipe/src/presentation/pages/message_page.dart';
 import 'package:videosdk/videosdk.dart';
 
 import '../bloc/actions/actions_bloc.dart';
@@ -81,6 +83,18 @@ class _ConfereneceMeetingScreenState extends State<ConfereneceMeetingScreen> {
       child: _joined
           ? SafeArea(
               child: Scaffold(
+                appBar: AppBar(
+                  backgroundColor: PipeColor.kPipeBlack,
+                  title: GestureDetector(
+                    onLongPress: () {
+                      Clipboard.setData(ClipboardData(text: meeting.id));
+                      showSnackBarMessage(
+                          message: "El id de la reunión se ha copiado",
+                          context: context);
+                    },
+                    child: Text('ID: ${meeting.id}'),
+                  ),
+                ),
                 backgroundColor: PipeColor.kPipeGreen,
                 body: Column(
                   mainAxisSize: MainAxisSize.max,
@@ -178,6 +192,31 @@ class _ConfereneceMeetingScreenState extends State<ConfereneceMeetingScreen> {
                       child: Icon(context.read<ActionsBloc>().state.micEnabled
                           ? Icons.mic
                           : Icons.mic_off),
+                    ),
+                    FloatingActionButton(
+                      heroTag: 'chat',
+                      backgroundColor: PipeColor.kPipeGreen,
+                      key: const Key('chat'),
+                      onPressed: () {
+                        di<NavigationService>().navigatorKey.currentState!.push(
+                              MaterialPageRoute(
+                                  builder: (context) => MessagePage(
+                                        meeting: meeting,
+                                      ),
+                                  fullscreenDialog: true),
+                            );
+                      },
+                      child: const Icon(Icons.chat),
+                    ),
+                    FloatingActionButton(
+                      heroTag: 'leave',
+                      backgroundColor: Colors.black,
+                      key: const Key('leave'),
+                      onPressed: () {
+                        meeting.leave();
+                        di<NavigationService>().goBack();
+                      },
+                      child: const Icon(Icons.exit_to_app),
                     ),
                   ],
                 ),
@@ -307,6 +346,8 @@ class _ConfereneceMeetingScreenState extends State<ConfereneceMeetingScreen> {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
+
+    meeting.leave();
 
     super.dispose();
   }

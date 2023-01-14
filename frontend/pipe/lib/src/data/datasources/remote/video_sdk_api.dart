@@ -52,8 +52,7 @@ Future<dynamic> fetchSession(String token, String meetingId) async {
 Future<dynamic> getRooms(String token) async {
   final String? videoSdkApiEndPoint = dotenv.env['VIDEOSDK_API_ENDPOINT'];
 
-  final Uri getMeetingIdUrl =
-      Uri.parse('$videoSdkApiEndPoint/rooms?page=1&perPage=20');
+  final Uri getMeetingIdUrl = Uri.parse('$videoSdkApiEndPoint/rooms');
   final http.Response meetingIdResponse =
       await http.get(getMeetingIdUrl, headers: {
     "Authorization": token,

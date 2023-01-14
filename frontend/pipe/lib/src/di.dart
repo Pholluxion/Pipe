@@ -8,6 +8,7 @@ import 'domain/repositories/auth_repository.dart';
 import 'domain/usecases/generate_token_usecase.dart';
 import 'domain/usecases/login_user_usecase.dart';
 import 'domain/usecases/register_user_usecase.dart';
+import 'domain/usecases/update_userdata_usecase.dart';
 import 'presentation/bloc/actions/actions_bloc.dart';
 import 'presentation/bloc/camera/camera_bloc.dart';
 import 'presentation/bloc/home/home_cubit.dart';
@@ -23,23 +24,32 @@ void init() {
   di.registerLazySingleton<CameraBloc>(() => CameraBloc());
   di.registerLazySingleton<ActionsBloc>(() => ActionsBloc());
   di.registerLazySingleton<SignUpCubit>(() => SignUpCubit());
-  di.registerLazySingleton<VideoSdkBloc>(() => VideoSdkBloc());
   di.registerLazySingleton<MicrofoneCubit>(() => MicrofoneCubit());
+  di.registerLazySingleton<VideoSdkBloc>(() => VideoSdkBloc());
   di.registerLazySingleton<LogInCubit>(() => LogInCubit(homeCubit: di()));
 
   di.registerFactory<LoginWithEmailAndPassword>(
-      () => LoginWithEmailAndPassword(authRepository: di()));
+    () => LoginWithEmailAndPassword(authRepository: di()),
+  );
 
-  di.registerFactory<GenerateToken>(() => GenerateToken(authRepository: di()));
+  di.registerFactory<GenerateToken>(
+    () => GenerateToken(authRepository: di()),
+  );
+
+  di.registerFactory<UpdateUserData>(
+    () => UpdateUserData(authRepository: di()),
+  );
 
   di.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(authRemoteDataSource: di()));
+    () => AuthRepositoryImpl(authRemoteDataSource: di()),
+  );
 
   di.registerLazySingleton<RemoteDataSource>(
       () => AuthRemoteDataSource(dio: di()));
 
   di.registerFactory<RegisterWithEmailAndPassword>(
-      () => RegisterWithEmailAndPassword(authRepository: di()));
+    () => RegisterWithEmailAndPassword(authRepository: di()),
+  );
 
   di.registerLazySingleton(() => Dio());
 

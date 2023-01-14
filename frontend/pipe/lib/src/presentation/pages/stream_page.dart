@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pipe/src/data/services/navigation_service.dart';
 import 'package:pipe/src/di.dart';
 import 'package:pipe/src/presentation/bloc/home/home_cubit.dart';
+import 'package:pipe/src/presentation/pages/join_page.dart';
 import 'package:pipe/src/presentation/pages/metting_page.dart';
 import 'package:pipe/src/presentation/routes.dart' as routes;
 
@@ -63,11 +64,12 @@ class _StreamPageState extends State<StreamPage> {
               );
             } else if (state is LoadedRoomsState) {
               if (state.rooms.isNotEmpty) {
+                final rooms = state.rooms.reversed.toList();
                 return SingleChildScrollView(
                   child: Center(
                     child: Wrap(
                       alignment: WrapAlignment.spaceAround,
-                      children: state.rooms
+                      children: rooms
                           .asMap()
                           .entries
                           .map(
@@ -98,7 +100,7 @@ class _StreamPageState extends State<StreamPage> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Sala: ${e.key + 1} : ${e.value['roomId']}',
+                                      'Sala ${e.key + 1}: ${e.value['roomId']}',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 20.0,
@@ -140,19 +142,46 @@ class _StreamPageState extends State<StreamPage> {
       drawer: orientation == Orientation.landscape ? const PipeDrawer() : null,
       bottomNavigationBar:
           orientation == Orientation.portrait ? const PipeNavBar() : null,
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterDocked,
-      floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            di<NavigationService>().navigatorKey.currentState!.push(
-                  MaterialPageRoute(
-                    builder: (context) => const NewMettingPage(),
-                  ),
-                ),
-        child: Icon(
-          Icons.video_call,
-          color: PipeColor.kPipeBlack,
-        ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton(
+              heroTag: 'create_room_btn',
+              key: const Key('create_room_btn'),
+              onPressed: () =>
+                  di<NavigationService>().navigatorKey.currentState!.push(
+                        MaterialPageRoute(
+                          builder: (context) => const NewMettingPage(),
+                        ),
+                      ),
+              child: Icon(
+                Icons.video_call,
+                color: PipeColor.kPipeBlack,
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: FloatingActionButton(
+              heroTag: 'join_room',
+              key: const Key('join_room'),
+              onPressed: () =>
+                  di<NavigationService>().navigatorKey.currentState!.push(
+                        MaterialPageRoute(
+                          builder: (context) => const JoinPage(),
+                        ),
+                      ),
+              child: Icon(
+                Icons.door_front_door_outlined,
+                color: PipeColor.kPipeBlack,
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

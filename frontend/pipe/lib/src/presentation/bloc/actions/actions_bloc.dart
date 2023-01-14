@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -47,7 +49,9 @@ class ActionsBloc extends Bloc<ActionsEvent, ActionsState> {
           state.copyWith(roomId: value),
         ),
       );
-    } catch (_) {}
+    } catch (e) {
+      log(e.toString());
+    }
   }
 
   void _handleMicEnabledEvent(

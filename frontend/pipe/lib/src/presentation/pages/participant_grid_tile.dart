@@ -106,7 +106,7 @@ class _ParticipantGridTileState extends State<ParticipantGridTile> {
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(widget.participant.isLocal
-                    ? "You"
+                    ? "Tú"
                     : widget.participant.displayName)),
           ),
         ],
@@ -115,44 +115,44 @@ class _ParticipantGridTileState extends State<ParticipantGridTile> {
   }
 
   _initStreamListeners() {
-    widget.participant.on(Events.streamEnabled, (Stream _stream) {
+    widget.participant.on(Events.streamEnabled, (Stream stream) {
       setState(() {
-        if (_stream.kind == 'video') {
-          videoStream = _stream;
+        if (stream.kind == 'video') {
+          videoStream = stream;
           widget.participant.setQuality(widget.quality);
-        } else if (_stream.kind == 'audio') {
-          audioStream = _stream;
+        } else if (stream.kind == 'audio') {
+          audioStream = stream;
         }
       });
     });
 
-    widget.participant.on(Events.streamDisabled, (Stream _stream) {
+    widget.participant.on(Events.streamDisabled, (Stream stream) {
       setState(() {
-        if (_stream.kind == 'video' && videoStream?.id == _stream.id) {
+        if (stream.kind == 'video' && videoStream?.id == stream.id) {
           videoStream = null;
-        } else if (_stream.kind == 'audio' && audioStream?.id == _stream.id) {
+        } else if (stream.kind == 'audio' && audioStream?.id == stream.id) {
           audioStream = null;
         }
       });
     });
 
-    widget.participant.on(Events.streamPaused, (Stream _stream) {
+    widget.participant.on(Events.streamPaused, (Stream stream) {
       setState(() {
-        if (_stream.kind == 'video' && videoStream?.id == _stream.id) {
+        if (stream.kind == 'video' && videoStream?.id == stream.id) {
           videoStream = null;
-        } else if (_stream.kind == 'audio' && audioStream?.id == _stream.id) {
-          audioStream = _stream;
+        } else if (stream.kind == 'audio' && audioStream?.id == stream.id) {
+          audioStream = stream;
         }
       });
     });
 
-    widget.participant.on(Events.streamResumed, (Stream _stream) {
+    widget.participant.on(Events.streamResumed, (Stream stream) {
       setState(() {
-        if (_stream.kind == 'video' && videoStream?.id == _stream.id) {
-          videoStream = _stream;
+        if (stream.kind == 'video' && videoStream?.id == stream.id) {
+          videoStream = stream;
           widget.participant.setQuality(widget.quality);
-        } else if (_stream.kind == 'audio' && audioStream?.id == _stream.id) {
-          audioStream = _stream;
+        } else if (stream.kind == 'audio' && audioStream?.id == stream.id) {
+          audioStream = stream;
         }
       });
     });
