@@ -100,7 +100,7 @@ class _StreamPageState extends State<StreamPage> {
                                   ),
                                   child: Center(
                                     child: Text(
-                                      'Sala ${e.key + 1}: ${e.value['roomId']}',
+                                      'Sala: ${e.value['roomId']}',
                                       style: const TextStyle(
                                         color: Colors.white,
                                         fontSize: 20.0,

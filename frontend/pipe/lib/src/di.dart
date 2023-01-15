@@ -14,6 +14,7 @@ import 'presentation/bloc/camera/camera_bloc.dart';
 import 'presentation/bloc/home/home_cubit.dart';
 import 'presentation/bloc/login/login_cubit.dart';
 import 'presentation/bloc/microfone/microfone_cubit.dart';
+import 'presentation/bloc/participant/participant_cubit.dart';
 import 'presentation/bloc/signup/signup_cubit.dart';
 import 'presentation/bloc/video/video_sdk_bloc.dart';
 
@@ -24,8 +25,9 @@ void init() {
   di.registerLazySingleton<CameraBloc>(() => CameraBloc());
   di.registerLazySingleton<ActionsBloc>(() => ActionsBloc());
   di.registerLazySingleton<SignUpCubit>(() => SignUpCubit());
-  di.registerLazySingleton<MicrofoneCubit>(() => MicrofoneCubit());
   di.registerLazySingleton<VideoSdkBloc>(() => VideoSdkBloc());
+  di.registerLazySingleton<MicrofoneCubit>(() => MicrofoneCubit());
+  di.registerLazySingleton<ParticipantCubit>(() => ParticipantCubit());
   di.registerLazySingleton<LogInCubit>(() => LogInCubit(homeCubit: di()));
 
   di.registerFactory<LoginWithEmailAndPassword>(

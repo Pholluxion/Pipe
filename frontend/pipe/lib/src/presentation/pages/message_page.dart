@@ -112,11 +112,19 @@ class _MessagePageState extends State<MessagePage> {
                           msgTextController.text;
                         }),
                         decoration: InputDecoration(
-                            hintText: "Escribe un mensaje",
-                            border: InputBorder.none,
-                            hintStyle: TextStyle(
+                          hintText: "Escribe un mensaje",
+                          border: OutlineInputBorder(
+                            gapPadding: 10.0,
+                            borderSide: BorderSide(
                               color: PipeColor.kPipeWhite,
-                            )),
+                              width: 2.0,
+                            ),
+                            borderRadius: BorderRadius.circular(25.0),
+                          ),
+                          hintStyle: TextStyle(
+                            color: PipeColor.kPipeWhite,
+                          ),
+                        ),
                       ),
                     ),
                     GestureDetector(
@@ -130,16 +138,17 @@ class _MessagePageState extends State<MessagePage> {
                               )
                               .then((value) => msgTextController.clear()),
                       child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 8, vertical: 8),
-                          width: 45,
-                          margin: const EdgeInsets.all(5),
-                          decoration: BoxDecoration(
-                              color: msgTextController.text.trim().isEmpty
-                                  ? null
-                                  : PipeColor.kPipeGreen,
-                              borderRadius: BorderRadius.circular(8)),
-                          child: const Icon(Icons.send)),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 8),
+                        width: 45,
+                        margin: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                            color: msgTextController.text.trim().isEmpty
+                                ? null
+                                : PipeColor.kPipeGreen,
+                            borderRadius: BorderRadius.circular(8)),
+                        child: const Icon(Icons.send),
+                      ),
                     )
                   ],
                 ),

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:pipe/src/core/utils/colors.dart';
+import 'package:pipe/src/di.dart';
+import 'package:pipe/src/presentation/bloc/participant/participant_cubit.dart';
 import 'package:videosdk/videosdk.dart';
 
 class ParticipantGridTile extends StatefulWidget {
@@ -48,68 +51,78 @@ class _ParticipantGridTileState extends State<ParticipantGridTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.black,
-        border: widget.activeSpeakerId != null &&
-                widget.activeSpeakerId == widget.participant.id
-            ? Border.all(color: Colors.purple)
-            : null,
-      ),
-      child: Stack(
-        children: [
-          videoStream != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: RTCVideoView(
-                    videoStream?.renderer as RTCVideoRenderer,
-                    objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-                  ),
-                )
-              : Center(
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.green,
+    return GestureDetector(
+      onDoubleTap: () {
+        di<ParticipantCubit>().changeParticipant(widget.participant.id);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          color: Colors.black,
+          border: widget.activeSpeakerId != null &&
+                  widget.activeSpeakerId == widget.participant.id
+              ? Border.all(color: Colors.purple)
+              : null,
+        ),
+        child: Stack(
+          children: [
+            videoStream != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: RTCVideoView(
+                      videoStream?.renderer as RTCVideoRenderer,
+                      objectFit:
+                          RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
                     ),
-                    child: Text(
-                      widget.participant.displayName.characters.first
-                          .toUpperCase(),
-                      style: const TextStyle(fontSize: 30),
+                  )
+                : Center(
+                    child: Container(
+                      padding: const EdgeInsets.all(15),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: PipeColor.kPipeGreen,
+                      ),
+                      child: Text(
+                        widget.participant.displayName.characters.first
+                            .toUpperCase(),
+                        style: const TextStyle(fontSize: 30),
+                      ),
                     ),
                   ),
-                ),
-          if (audioStream == null)
+            if (audioStream == null)
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: const Icon(
+                      Icons.mic_off,
+                      size: 15,
+                    )),
+              ),
             Positioned(
-              top: 8,
-              right: 8,
+              bottom: 4,
+              left: 4,
               child: Container(
-                  padding: const EdgeInsets.all(4),
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Icon(
-                    Icons.mic_off,
-                    size: 15,
-                  )),
-            ),
-          Positioned(
-            bottom: 4,
-            left: 4,
-            child: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
-                  color: Colors.amber,
+                  color: Colors.white,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(widget.participant.isLocal
-                    ? "Tú"
-                    : widget.participant.displayName)),
-          ),
-        ],
+                child: Text(
+                  widget.participant.isLocal
+                      ? "Tú"
+                      : widget.participant.displayName,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

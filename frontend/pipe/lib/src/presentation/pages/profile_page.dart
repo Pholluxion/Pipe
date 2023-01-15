@@ -4,6 +4,7 @@ import 'package:pipe/src/data/models/user_data_model.dart';
 
 import '../../core/utils/colors.dart';
 import '../bloc/home/home_cubit.dart';
+import '../widgets/pipe_toast_widget.dart';
 import '../widgets/widget.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -105,10 +106,16 @@ class _ProfilePageState extends State<ProfilePage> {
                     },
                   ),
                   GreenBigButton(
-                      onPressed: () {
-                        context.read<HomeCubit>().updateUserData();
-                      },
-                      label: 'Actualizar Datos')
+                    onPressed: () {
+                      context.read<HomeCubit>().updateUserData().then(
+                            (value) => showSnackBarMessage(
+                              context: context,
+                              message: '¡Datos actualizados!',
+                            ),
+                          );
+                    },
+                    label: 'Actualizar Datos',
+                  )
                 ],
               ),
             );

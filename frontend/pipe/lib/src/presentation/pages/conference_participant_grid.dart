@@ -1,7 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pipe/src/di.dart';
 import 'package:videosdk/videosdk.dart';
 
+import '../bloc/participant/participant_cubit.dart';
 import 'participant_grid_tile.dart';
 
 class ConferenceParticipantGrid extends StatefulWidget {
@@ -35,6 +38,8 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
     // Setting meeting event listeners
     setMeetingListeners(widget.meeting);
 
+    di<ParticipantCubit>().changeParticipant(localParticipant.id);
+
     super.initState();
   }
 
@@ -49,21 +54,72 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        ...onScreenParticipants.entries
-            .map(
-              (e) => Flexible(
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: ParticipantGridTile(
-                    key: Key(e.value.id),
-                    participant: e.value,
-                    activeSpeakerId: activeSpeakerId,
-                    quality: quality,
-                  ),
+        Flexible(
+          flex: 3,
+          child: BlocBuilder(
+            bloc: di<ParticipantCubit>(),
+            builder: (context, String state) {
+              return Padding(
+                padding: const EdgeInsets.all(4.0),
+                child: onScreenParticipants.containsKey(state)
+                    ? ParticipantGridTile(
+                        key: Key(state),
+                        participant: onScreenParticipants[state]!,
+                        activeSpeakerId: activeSpeakerId,
+                        quality: quality,
+                      )
+                    : onScreenParticipants.length == 1
+                        ? ParticipantGridTile(
+                            key: Key(localParticipant.id),
+                            participant: localParticipant,
+                            activeSpeakerId: activeSpeakerId,
+                            quality: quality,
+                          )
+                        : const Center(
+                            child: Icon(
+                              Icons.sentiment_very_satisfied_outlined,
+                              size: 150.0,
+                            ),
+                          ),
+              );
+            },
+          ),
+        ),
+        BlocBuilder(
+          bloc: di<ParticipantCubit>(),
+          builder: (context, state) {
+            return Visibility(
+              visible: onScreenParticipants.length > 1,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    ...onScreenParticipants.entries.map(
+                      (e) {
+                        return e.key == state
+                            ? const SizedBox()
+                            : SizedBox(
+                                width: 200,
+                                height: 150,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(4.0),
+                                  child: ParticipantGridTile(
+                                    key: Key(e.value.id),
+                                    participant: e.value,
+                                    activeSpeakerId: activeSpeakerId,
+                                    quality: quality,
+                                  ),
+                                ),
+                              );
+                      },
+                    ).toList(),
+                  ],
                 ),
               ),
-            )
-            .toList(),
+            );
+          },
+        ),
       ],
     );
   }

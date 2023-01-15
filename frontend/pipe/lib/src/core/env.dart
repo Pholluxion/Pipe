@@ -1,1 +1,1 @@
-const String kIpConfig = '10.14.41.250:8080';
+const String kIpConfig = '192.168.1.17:8080';

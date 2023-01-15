@@ -59,9 +59,10 @@ class ChatWidget extends StatelessWidget {
                     message.timestamp.toLocal().format('h:i a'),
                     textAlign: TextAlign.end,
                     style: TextStyle(
-                        color: PipeColor.kPipeBlack,
-                        fontSize: 10,
-                        fontWeight: FontWeight.w500),
+                      color: PipeColor.kPipeBlack,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
               ],
