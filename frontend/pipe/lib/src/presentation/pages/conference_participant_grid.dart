@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -93,7 +95,7 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
               child: SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ...onScreenParticipants.entries.map(
                       (e) {
@@ -154,17 +156,27 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
 
     meeting.on(
       Events.speakerChanged,
-      (activeSpeakerId) {
+      (kactiveSpeakerId) {
         setState(() {
-          activeSpeakerId = activeSpeakerId;
+          activeSpeakerId = kactiveSpeakerId;
           updateOnScreenParticipants();
         });
       },
     );
 
-    meeting.on(Events.presenterChanged, (presenterId) {
+    meeting.on(
+      Events.speakerChanged,
+      (kactiveSpeakerId) {
+        setState(() {
+          activeSpeakerId = kactiveSpeakerId;
+          log(activeSpeakerId.toString());
+        });
+      },
+    );
+
+    meeting.on(Events.presenterChanged, (kpresenterId) {
       setState(() {
-        presenterId = presenterId;
+        presenterId = kpresenterId;
         numberOfMaxOnScreenParticipants = presenterId != null ? 2 : 6;
         updateOnScreenParticipants();
       });

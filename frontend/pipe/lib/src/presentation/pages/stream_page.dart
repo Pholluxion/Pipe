@@ -99,12 +99,18 @@ class _StreamPageState extends State<StreamPage> {
                                     ),
                                   ),
                                   child: Center(
-                                    child: Text(
-                                      'Sala: ${e.value['roomId']}',
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.w200,
+                                    child: FittedBox(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'Sala: ${e.value['roomId']}',
+                                          overflow: TextOverflow.fade,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.w200,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),

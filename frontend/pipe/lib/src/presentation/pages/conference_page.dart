@@ -7,6 +7,7 @@ import 'package:pipe/src/di.dart';
 import 'package:pipe/src/presentation/pages/loading_page.dart';
 import 'package:pipe/src/presentation/pages/message_page.dart';
 import 'package:videosdk/videosdk.dart';
+import 'package:pipe/src/presentation/routes.dart' as routes;
 
 import '../bloc/actions/actions_bloc.dart';
 import '../widgets/pipe_toast_widget.dart';
@@ -107,157 +108,176 @@ class _ConfereneceMeetingScreenState extends State<ConfereneceMeetingScreen> {
                   },
                 ),
                 floatingActionButtonLocation:
-                    FloatingActionButtonLocation.miniCenterDocked,
+                    FloatingActionButtonLocation.endFloat,
                 floatingActionButton: Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: ValueListenableBuilder<bool>(
                     valueListenable: _toogleMenu,
                     builder: (context, value, child) {
                       if (value) {
-                        return Center(
-                          child: Card(
-                            color: Colors.white,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                FloatingActionButton(
-                                  mini: true,
-                                  heroTag: 'cameraswitch_sharp',
-                                  backgroundColor: PipeColor.kPipeGreen,
-                                  key: const Key('cameraswitch_sharp'),
-                                  onPressed: () {
-                                    final state =
-                                        context.read<ActionsBloc>().state;
-                                    if (state.defaultCameraIndex.isEven) {
-                                      di<ActionsBloc>()
-                                          .add(const HandleCameraIndexEvent(1));
-                                      meeting.changeCam(
-                                        state.defaultCameraIndex.toString(),
-                                      );
-                                    } else {
-                                      di<ActionsBloc>()
-                                          .add(const HandleCameraIndexEvent(0));
-                                      meeting.changeCam(
-                                        state.defaultCameraIndex.toString(),
-                                      );
-                                    }
-                                  },
-                                  child: const Icon(
-                                    Icons.cameraswitch_sharp,
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16.0),
+                                child: Card(
+                                  elevation: 10.0,
+                                  shadowColor: PipeColor.kPipeBlack,
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceAround,
+                                    children: [
+                                      FloatingActionButton(
+                                        mini: true,
+                                        heroTag: 'cameraswitch_sharp',
+                                        backgroundColor: PipeColor.kPipeGreen,
+                                        key: const Key('cameraswitch_sharp'),
+                                        onPressed: () {
+                                          final state =
+                                              context.read<ActionsBloc>().state;
+                                          if (state.defaultCameraIndex.isEven) {
+                                            di<ActionsBloc>().add(
+                                                const HandleCameraIndexEvent(
+                                                    1));
+                                            meeting.changeCam(
+                                              state.defaultCameraIndex
+                                                  .toString(),
+                                            );
+                                          } else {
+                                            di<ActionsBloc>().add(
+                                                const HandleCameraIndexEvent(
+                                                    0));
+                                            meeting.changeCam(
+                                              state.defaultCameraIndex
+                                                  .toString(),
+                                            );
+                                          }
+                                        },
+                                        child: const Icon(
+                                          Icons.cameraswitch_sharp,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2.0),
+                                      FloatingActionButton(
+                                        mini: true,
+                                        heroTag: 'videocam_off',
+                                        backgroundColor: PipeColor.kPipeGreen,
+                                        key: const Key('videocam_off'),
+                                        onPressed: () {
+                                          final state =
+                                              context.read<ActionsBloc>().state;
+                                          if (!state.camEnabled) {
+                                            showSnackBarMessage(
+                                              context: context,
+                                              message: 'Camara abierta',
+                                            );
+                                            di<ActionsBloc>()
+                                                .add(HandleCamEnabledEvent());
+                                            meeting.enableCam();
+                                          } else {
+                                            showSnackBarMessage(
+                                              context: context,
+                                              message: 'Camara cerrada',
+                                            );
+                                            di<ActionsBloc>()
+                                                .add(HandleCamDisabledEvent());
+                                            meeting.disableCam();
+                                          }
+                                        },
+                                        child: Icon(
+                                          context
+                                                  .read<ActionsBloc>()
+                                                  .state
+                                                  .camEnabled
+                                              ? Icons.videocam
+                                              : Icons.videocam_off,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 2.0),
+                                      FloatingActionButton(
+                                        mini: true,
+                                        heroTag: 'mic_off',
+                                        backgroundColor: PipeColor.kPipeGreen,
+                                        key: const Key('mic_off'),
+                                        onPressed: () {
+                                          final state =
+                                              context.read<ActionsBloc>().state;
+                                          if (state.micEnabled) {
+                                            showSnackBarMessage(
+                                              context: context,
+                                              message: 'Micrófono cerrado',
+                                            );
+                                            meeting.muteMic();
+                                            di<ActionsBloc>()
+                                                .add(HandleMicDisabledEvent());
+                                          } else {
+                                            showSnackBarMessage(
+                                              context: context,
+                                              message: 'Micrófono abierto',
+                                            );
+                                            meeting.unmuteMic();
+                                            di<ActionsBloc>()
+                                                .add(HandleMicEnabledEvent());
+                                          }
+                                        },
+                                        child: Icon(context
+                                                .read<ActionsBloc>()
+                                                .state
+                                                .micEnabled
+                                            ? Icons.mic
+                                            : Icons.mic_off),
+                                      ),
+                                      const SizedBox(height: 2.0),
+                                      FloatingActionButton(
+                                        mini: true,
+                                        heroTag: 'chat',
+                                        backgroundColor: PipeColor.kPipeGreen,
+                                        key: const Key('chat'),
+                                        onPressed: () {
+                                          di<NavigationService>()
+                                              .navigatorKey
+                                              .currentState!
+                                              .push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        MessagePage(
+                                                          meeting: meeting,
+                                                        ),
+                                                    fullscreenDialog: true),
+                                              );
+                                        },
+                                        child: const Icon(Icons.chat),
+                                      ),
+                                      const SizedBox(height: 2.0),
+                                      FloatingActionButton(
+                                        mini: true,
+                                        heroTag: 'leave',
+                                        backgroundColor: Colors.red,
+                                        key: const Key('leave'),
+                                        onPressed: () {
+                                          meeting.leave();
+                                          di<NavigationService>()
+                                              .navigateTo(routes.kHomeRoute);
+                                        },
+                                        child: const Icon(Icons.exit_to_app),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                const SizedBox(height: 2.0),
-                                FloatingActionButton(
-                                  mini: true,
-                                  heroTag: 'videocam_off',
-                                  backgroundColor: PipeColor.kPipeGreen,
-                                  key: const Key('videocam_off'),
-                                  onPressed: () {
-                                    final state =
-                                        context.read<ActionsBloc>().state;
-                                    if (!state.camEnabled) {
-                                      showSnackBarMessage(
-                                        context: context,
-                                        message: 'Camara abierta',
-                                      );
-                                      di<ActionsBloc>()
-                                          .add(HandleCamEnabledEvent());
-                                      meeting.enableCam();
-                                    } else {
-                                      showSnackBarMessage(
-                                        context: context,
-                                        message: 'Camara cerrada',
-                                      );
-                                      di<ActionsBloc>()
-                                          .add(HandleCamDisabledEvent());
-                                      meeting.disableCam();
-                                    }
-                                  },
-                                  child: Icon(
-                                    context.read<ActionsBloc>().state.camEnabled
-                                        ? Icons.videocam
-                                        : Icons.videocam_off,
-                                  ),
-                                ),
-                                const SizedBox(height: 2.0),
-                                FloatingActionButton(
-                                  mini: true,
-                                  heroTag: 'mic_off',
-                                  backgroundColor: PipeColor.kPipeGreen,
-                                  key: const Key('mic_off'),
-                                  onPressed: () {
-                                    final state =
-                                        context.read<ActionsBloc>().state;
-                                    if (state.micEnabled) {
-                                      showSnackBarMessage(
-                                        context: context,
-                                        message: 'Micrófono cerrado',
-                                      );
-                                      meeting.muteMic();
-                                      di<ActionsBloc>()
-                                          .add(HandleMicDisabledEvent());
-                                    } else {
-                                      showSnackBarMessage(
-                                        context: context,
-                                        message: 'Micrófono abierto',
-                                      );
-                                      meeting.unmuteMic();
-                                      di<ActionsBloc>()
-                                          .add(HandleMicEnabledEvent());
-                                    }
-                                  },
-                                  child: Icon(context
-                                          .read<ActionsBloc>()
-                                          .state
-                                          .micEnabled
-                                      ? Icons.mic
-                                      : Icons.mic_off),
-                                ),
-                                const SizedBox(height: 2.0),
-                                FloatingActionButton(
-                                  mini: true,
-                                  heroTag: 'chat',
-                                  backgroundColor: PipeColor.kPipeGreen,
-                                  key: const Key('chat'),
-                                  onPressed: () {
-                                    di<NavigationService>()
-                                        .navigatorKey
-                                        .currentState!
-                                        .push(
-                                          MaterialPageRoute(
-                                              builder: (context) => MessagePage(
-                                                    meeting: meeting,
-                                                  ),
-                                              fullscreenDialog: true),
-                                        );
-                                  },
-                                  child: const Icon(Icons.chat),
-                                ),
-                                const SizedBox(height: 2.0),
-                                FloatingActionButton(
-                                  mini: true,
-                                  heroTag: 'leave',
-                                  backgroundColor: Colors.red,
-                                  key: const Key('leave'),
-                                  onPressed: () {
-                                    meeting.leave();
-                                    di<NavigationService>().goBack();
-                                  },
-                                  child: const Icon(Icons.exit_to_app),
-                                ),
-                                const SizedBox(height: 2.0),
-                                FloatingActionButton(
-                                  mini: true,
-                                  heroTag: '_toogleMenu_2',
-                                  backgroundColor: Colors.blue,
-                                  child: const Icon(Icons.swipe_down),
-                                  onPressed: () {
-                                    _toogleMenu.value = false;
-                                  },
-                                )
-                              ],
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 2.0),
+                            FloatingActionButton(
+                              heroTag: '_toogleMenu_2',
+                              backgroundColor: Colors.blue,
+                              child: const Icon(Icons.menu),
+                              onPressed: () {
+                                _toogleMenu.value = false;
+                              },
+                            )
+                          ],
                         );
                       } else {
                         return FloatingActionButton(
@@ -314,10 +334,7 @@ class _ConfereneceMeetingScreenState extends State<ConfereneceMeetingScreen> {
         showSnackBarMessage(
             message: "Meeting left due to $errorMsg !!", context: context);
       }
-      // Navigator.pushAndRemoveUntil(
-      //     context,
-      //     MaterialPageRoute(builder: (context) => const JoinScreen()),
-      //     (route) => false);
+      Navigator.pop(context);
     });
 
     // Called when recording is started

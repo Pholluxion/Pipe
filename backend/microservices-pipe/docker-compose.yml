@@ -1,0 +1,79 @@
+---
+version: '3.7'
+services:
+  ## psql Docker Compose Config
+  postgres-auth:
+    container_name: postgres-auth
+    image: postgres
+    environment:
+      POSTGRES_DB: pipe
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: root
+      PGDATA: /data/postgres
+    volumes:
+      - ./postgres-auth:/data/postgres
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    command: -p 5432
+    restart: always
+
+  ## Mongo Docker Compose Config
+  mongo:
+    container_name: mongo
+    image: mongo:4.4.14-rc0-focal
+    restart: always
+    ports:
+      - "27017:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ./mongo-data:/data/db
+
+
+  ## Eureka Server
+  discovery-server:
+    image: pholluxion/discovery-service:latest
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  api-gateway:
+    image: pholluxion/api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
+    depends_on:
+      - discovery-server
+
+  ## auth-Service Docker Compose Config
+  auth-service:
+    container_name: auth-service
+    image: pholluxion/auth-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/pipe
+    depends_on:
+      - discovery-server
+      - api-gateway
+      - postgres-auth
+
+  ## userdata-Service Docker Compose Config
+  userdata-service:
+    container_name: userdata-service
+    image: pholluxion/userdata-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - mongo
+      - discovery-server
+      - api-gateway
+

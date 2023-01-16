@@ -14,6 +14,9 @@ class LoadingRoomsState extends VideoSdkState {}
 class LoadedRoomsState extends VideoSdkState {
   final List<dynamic> rooms;
 
+  @override
+  List<Object> get props => [rooms];
+
   const LoadedRoomsState(this.rooms);
 }
 

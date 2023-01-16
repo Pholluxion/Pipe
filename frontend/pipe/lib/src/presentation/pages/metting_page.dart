@@ -161,7 +161,7 @@ class _NewMettingPageState extends State<NewMettingPage> {
 
                     if (state.roomId.isNotEmpty) {
                       di<NavigationService>()
-                          .popAndNavigateTo(routes.kConferencePage);
+                          .navigateTo(routes.kConferencePage);
                     } else {
                       return;
                     }
