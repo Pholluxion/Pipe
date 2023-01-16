@@ -5,3 +5,5 @@ backend/microservices-pipe/userdata-service/target
 backend/microservices-pipe/auth-service/target
 backend/microservices-pipe/discovery-service/target
 backend/microservices-pipe/userdata-service/target
+frontend/pipe/lib/src/data/datasources/remote/auth_api.g.dart
+frontend/pipe/lib/src/data/datasources/remote/userdata_api.g.dart

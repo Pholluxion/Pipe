@@ -13,7 +13,7 @@ class _UserDataAPi implements UserDataAPi {
     this._dio, {
     this.baseUrl,
   }) {
-    baseUrl ??= 'http://192.168.1.17:8080/api/userdata';
+    baseUrl ??= 'http://192.168.1.23:8080/api/userdata';
   }
 
   final Dio _dio;

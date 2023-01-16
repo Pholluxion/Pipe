@@ -22,8 +22,8 @@ services:
   ## Mongo Docker Compose Config
   mongo:
     container_name: mongo
-    image: mongo:4.4.14-rc0-focal
-    restart: always
+    image: mongo:latest
+    restart: unless-stopped
     ports:
       - "27017:27017"
     expose:
@@ -33,9 +33,9 @@ services:
 
 
   ## Eureka Server
-  discovery-server:
+  discovery-service:
     image: pholluxion/discovery-service:latest
-    container_name: discovery-server
+    container_name: discovery-service
     ports:
       - "8761:8761"
     environment:
@@ -44,6 +44,7 @@ services:
   api-gateway:
     image: pholluxion/api-gateway:latest
     container_name: api-gateway
+    pull_policy: always
     ports:
       - "8080:8080"
     expose:
@@ -52,17 +53,18 @@ services:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
     depends_on:
-      - discovery-server
+      - discovery-service
 
   ## auth-Service Docker Compose Config
   auth-service:
     container_name: auth-service
     image: pholluxion/auth-service:latest
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres-auth:5432/pipe
     depends_on:
-      - discovery-server
+      - discovery-service
       - api-gateway
       - postgres-auth
 
@@ -70,10 +72,11 @@ services:
   userdata-service:
     container_name: userdata-service
     image: pholluxion/userdata-service:latest
+    pull_policy: always
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - mongo
-      - discovery-server
+      - discovery-service
       - api-gateway
 
