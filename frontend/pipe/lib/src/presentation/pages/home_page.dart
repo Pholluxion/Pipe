@@ -10,14 +10,45 @@ import '../bloc/login/login_cubit.dart';
 import 'profile_page.dart';
 import 'stream_page.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        _showErrorDialog(context);
-        return true;
+        final shouldPop = await showDialog<bool>(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: const Text('¿Deseas cerrar sesión?'),
+              actionsAlignment: MainAxisAlignment.spaceBetween,
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    context.read<LogInCubit>().logOutFormSubmitted();
+                    di<NavigationService>().goBack();
+                    di<NavigationService>()
+                        .popAndNavigateTo(routes.kLoginRoute);
+                  },
+                  child: const Text('Si'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context, false);
+                  },
+                  child: const Text('No'),
+                ),
+              ],
+            );
+          },
+        );
+        return shouldPop!;
       },
       child: BlocBuilder<HomeCubit, HomeState>(
         builder: (context, state) {
@@ -29,28 +60,6 @@ class HomePage extends StatelessWidget {
             return const ProfilePage();
           }
         },
-      ),
-    );
-  }
-
-  Future<void> _showErrorDialog(BuildContext context) {
-    return showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => AlertDialog(
-        title: const Text('¿Deseas cerrar sesión?'),
-        actions: <Widget>[
-          TextButton(
-            onPressed: () => di<NavigationService>().goBack(),
-            child: const Text('Nop'),
-          ),
-          TextButton(
-              onPressed: () {
-                context.read<LogInCubit>().logOutFormSubmitted();
-                di<NavigationService>().goBack();
-                di<NavigationService>().popAndNavigateTo(routes.kLoginRoute);
-              },
-              child: const Text('Cerrar sesión'))
-        ],
       ),
     );
   }

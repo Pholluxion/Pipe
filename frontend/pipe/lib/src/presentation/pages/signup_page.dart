@@ -15,76 +15,73 @@ class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Hero(
-      tag: 'init',
-      child: SafeArea(
-        child: Scaffold(
-          backgroundColor: PipeColor.kPipeBlack,
-          body: SingleChildScrollView(
-            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
-              child: BlocConsumer<SignUpCubit, SignUpState>(
-                listener: (context, state) {
-                  if (state.status.isSubmissionSuccess) {
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('¡Registro exitoso!'),
-                        content: const Text('Ya puedes iniciar sesión'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => di<NavigationService>()
-                                .popAndNavigateTo(routes.kLoginRoute),
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  } else if (state.status.isSubmissionFailure) {
-                    showDialog<String>(
-                      context: context,
-                      builder: (BuildContext context) => AlertDialog(
-                        title: const Text('¡Ocurrio un error!'),
-                        content: const Text(
-                            'Por favor verifica tus datos e intenta nuevamente.'),
-                        actions: <Widget>[
-                          TextButton(
-                            onPressed: () => di<NavigationService>().goBack(),
-                            child: const Text('OK'),
-                          ),
-                        ],
-                      ),
-                    );
-                  }
-                },
-                builder: (context, state) {
-                  if (state.status.isSubmissionInProgress) {
-                    return SizedBox(
-                      height: size.height,
-                      width: size.width,
-                      child: const Center(
-                        child: CircularProgressIndicator.adaptive(),
-                      ),
-                    );
-                  } else {
-                    return Column(
-                      children: const [
-                        PipeLogoTipo(h: 100.0),
-                        _RegisterMessage(),
-                        HelpBtn(),
-                        _UsernameTextFieldWidget(),
-                        _EmailTextFieldWidget(),
-                        _PasswordTextFieldWidget(),
-                        _ConfirmPasswordTextFieldWidget(),
-                        _RegisterUserBtn(),
-                        PipeDivider(),
-                        _RegisterBtn()
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: PipeColor.kPipeBlack,
+        body: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
+            child: BlocConsumer<SignUpCubit, SignUpState>(
+              listener: (context, state) {
+                if (state.status.isSubmissionSuccess) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('¡Registro exitoso!'),
+                      content: const Text('Ya puedes iniciar sesión'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => di<NavigationService>()
+                              .popAndNavigateTo(routes.kLoginRoute),
+                          child: const Text('OK'),
+                        ),
                       ],
-                    );
-                  }
-                },
-              ),
+                    ),
+                  );
+                } else if (state.status.isSubmissionFailure) {
+                  showDialog<String>(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                      title: const Text('¡Ocurrio un error!'),
+                      content: const Text(
+                          'Por favor verifica tus datos e intenta nuevamente.'),
+                      actions: <Widget>[
+                        TextButton(
+                          onPressed: () => di<NavigationService>().goBack(),
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+              },
+              builder: (context, state) {
+                if (state.status.isSubmissionInProgress) {
+                  return SizedBox(
+                    height: size.height,
+                    width: size.width,
+                    child: const Center(
+                      child: CircularProgressIndicator.adaptive(),
+                    ),
+                  );
+                } else {
+                  return Column(
+                    children: const [
+                      PipeLogoTipo(h: 100.0),
+                      _RegisterMessage(),
+                      HelpBtn(),
+                      _UsernameTextFieldWidget(),
+                      _EmailTextFieldWidget(),
+                      _PasswordTextFieldWidget(),
+                      _ConfirmPasswordTextFieldWidget(),
+                      _RegisterUserBtn(),
+                      PipeDivider(),
+                      _RegisterBtn()
+                    ],
+                  );
+                }
+              },
             ),
           ),
         ),

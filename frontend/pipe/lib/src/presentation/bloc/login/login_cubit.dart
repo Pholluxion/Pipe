@@ -65,15 +65,13 @@ class LogInCubit extends Cubit<LogInState> {
           );
       final token = await di.get<GenerateToken>().call();
 
-      Future.delayed(const Duration(seconds: 5)).then((value) {
-        emit(
-          state.copyWith(
-            status: FormzStatus.submissionSuccess,
-            username: response.toString(),
-            userResponseEntity: response,
-          ),
-        );
-      });
+      emit(
+        state.copyWith(
+          status: FormzStatus.submissionSuccess,
+          username: response.toString(),
+          userResponseEntity: response,
+        ),
+      );
 
       homeCubit.loadUser(response, token);
 

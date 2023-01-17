@@ -40,13 +40,16 @@ class _ProfilePageState extends State<ProfilePage> {
                       maxRadius: 70.0,
                       minRadius: 50.0,
                       child: FittedBox(
-                        child: Text(
-                          state.userResponseEntity?.userDto?.name
-                                  ?.split(' ')[0] ??
-                              '',
-                          style: TextStyle(
-                            color: PipeColor.kPipeWhite,
-                            fontSize: 30.0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            state.userResponseEntity?.userDto?.name
+                                    ?.split(' ')[0] ??
+                                '',
+                            style: TextStyle(
+                              color: PipeColor.kPipeWhite,
+                              fontSize: 30.0,
+                            ),
                           ),
                         ),
                       ),

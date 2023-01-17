@@ -64,12 +64,11 @@ class _StreamPageState extends State<StreamPage> {
               );
             } else if (state is LoadedRoomsState) {
               if (state.rooms.isNotEmpty) {
-                final rooms = state.rooms.reversed.toList();
                 return SingleChildScrollView(
                   child: Center(
                     child: Wrap(
                       alignment: WrapAlignment.spaceAround,
-                      children: rooms
+                      children: state.rooms
                           .asMap()
                           .entries
                           .map(
@@ -173,8 +172,8 @@ class _StreamPageState extends State<StreamPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: FloatingActionButton(
-              heroTag: 'join_room',
-              key: const Key('join_room'),
+              heroTag: 'join_room_btn',
+              key: const Key('join_room_btn'),
               onPressed: () =>
                   di<NavigationService>().navigatorKey.currentState!.push(
                         MaterialPageRoute(

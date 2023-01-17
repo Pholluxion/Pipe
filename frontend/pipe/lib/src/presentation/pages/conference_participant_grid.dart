@@ -87,41 +87,48 @@ class _ConferenceParticipantGridState extends State<ConferenceParticipantGrid> {
             },
           ),
         ),
-        BlocBuilder(
-          bloc: di<ParticipantCubit>(),
-          builder: (context, state) {
-            return Visibility(
-              visible: onScreenParticipants.length > 1,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ...onScreenParticipants.entries.map(
-                      (e) {
-                        return e.key == state
-                            ? const SizedBox()
-                            : SizedBox(
-                                width: 200,
-                                height: 150,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(4.0),
-                                  child: ParticipantGridTile(
-                                    key: Key(e.value.id),
-                                    participant: e.value,
-                                    activeSpeakerId: activeSpeakerId,
-                                    quality: quality,
+        SizedBox(
+          width: double.infinity,
+          child: BlocBuilder(
+            bloc: di<ParticipantCubit>(),
+            builder: (context, state) {
+              return Visibility(
+                visible: onScreenParticipants.length > 1,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ...onScreenParticipants.entries.map(
+                        (e) {
+                          return e.key == state
+                              ? const SizedBox()
+                              : SizedBox(
+                                  width: 200,
+                                  height: 150,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: ParticipantGridTile(
+                                      key: Key(e.value.id),
+                                      participant: e.value,
+                                      activeSpeakerId: activeSpeakerId,
+                                      quality: quality,
+                                    ),
                                   ),
-                                ),
-                              );
-                      },
-                    ).toList(),
-                  ],
+                                );
+                        },
+                      ).toList(),
+                    ],
+                  ),
                 ),
-              ),
-            );
-          },
+              );
+            },
+          ),
         ),
+        const SizedBox(
+          width: double.infinity,
+          height: 70.0,
+        )
       ],
     );
   }

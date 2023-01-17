@@ -13,17 +13,12 @@ class VideoSdkBloc extends Bloc<VideoSdkEvent, VideoSdkState> {
 
   void _loadRoomsEvent(GetRoomsEvent event, Emitter emit) async {
     try {
-      emit(LoadingRoomsState());
+      if (state is! LoadedRoomsState) {
+        emit(LoadingRoomsState());
+      }
       await getRooms(event.token).then(
         (rooms) {
-          final stateNow = state;
-          if (stateNow is LoadedRoomsState) {
-            final roomsNow = stateNow.rooms;
-
-            emit(LoadedRoomsState([roomsNow, ...rooms]));
-          } else {
-            emit(LoadedRoomsState(rooms));
-          }
+          emit(LoadedRoomsState(rooms));
         },
       );
     } catch (ex) {

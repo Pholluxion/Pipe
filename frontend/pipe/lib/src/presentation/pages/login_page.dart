@@ -15,35 +15,32 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Hero(
-      tag: 'init',
-      child: Scaffold(
-        backgroundColor: PipeColor.kPipeBlack,
-        body: SingleChildScrollView(
-          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
-            child: BlocListener<LogInCubit, LogInState>(
-              listener: (context, state) {
-                if (state.status.isSubmissionSuccess) {
-                  di<NavigationService>().popAndNavigateTo(routes.kHomeRoute);
-                } else if (state.status.isSubmissionFailure) {
-                  _showErrorDialog(context);
-                }
-              },
-              child: Column(
-                children: const [
-                  PipeLogoTipo(h: 150.0),
-                  _LoginMessage(),
-                  HelpBtn(),
-                  _EmailTextFieldWidget(),
-                  _PasswordTextFieldWidget(),
-                  _RecoveryPasswordBtn(),
-                  _LogInBtn(),
-                  PipeDivider(),
-                  _RegisterBtn()
-                ],
-              ),
+    return Scaffold(
+      backgroundColor: PipeColor.kPipeBlack,
+      body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: size.height * 0.1),
+          child: BlocListener<LogInCubit, LogInState>(
+            listener: (context, state) {
+              if (state.status.isSubmissionSuccess) {
+                di<NavigationService>().popAndNavigateTo(routes.kHomeRoute);
+              } else if (state.status.isSubmissionFailure) {
+                _showErrorDialog(context);
+              }
+            },
+            child: Column(
+              children: const [
+                PipeLogoTipo(h: 150.0),
+                _LoginMessage(),
+                HelpBtn(),
+                _EmailTextFieldWidget(),
+                _PasswordTextFieldWidget(),
+                _RecoveryPasswordBtn(),
+                _LogInBtn(),
+                PipeDivider(),
+                _RegisterBtn()
+              ],
             ),
           ),
         ),

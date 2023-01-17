@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pipe/src/di.dart';
 import 'package:pipe/src/presentation/routes.dart' as routes;
@@ -28,6 +29,11 @@ class _JoinPageState extends State<JoinPage> {
   @override
   void initState() {
     log('JOIN PAGE');
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     di<CameraBloc>().add(CloseCameraEvent());
     super.initState();
   }
@@ -76,17 +82,15 @@ class _JoinPageState extends State<JoinPage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Flexible(
-                child: PipeTextField(
-                  hintText: 'Código de la sala',
-                  value: _controller.text,
-                  onChanged: (p0) {
-                    di<ActionsBloc>().add(
-                      HandleRoomIdEvent(p0.trim()),
-                    );
-                    _controller.text = p0.trim();
-                  },
-                ),
+              child: PipeTextField(
+                hintText: 'Código de la sala',
+                value: _controller.text,
+                onChanged: (p0) {
+                  di<ActionsBloc>().add(
+                    HandleRoomIdEvent(p0.trim()),
+                  );
+                  _controller.text = p0.trim();
+                },
               ),
             ),
             Row(
@@ -253,10 +257,8 @@ class _VideoWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Center(
-        child: Flexible(
-          child: CameraPreview(
-            cameraController,
-          ),
+        child: CameraPreview(
+          cameraController,
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:pipe/src/core/utils/colors.dart';
 
 class LoadingPage extends StatelessWidget {
@@ -12,12 +11,9 @@ class LoadingPage extends StatelessWidget {
       body: Center(
         child: SizedBox(
           width: 150.0,
-          height: 150.0,
-          child: FittedBox(
-            child: Lottie.asset(
-              fit: BoxFit.contain,
-              'assets/lotties/loading_lottie.json',
-            ),
+          child: LinearProgressIndicator(
+            backgroundColor: PipeColor.kPipeBlack,
+            color: PipeColor.kPipeGreen,
           ),
         ),
       ),

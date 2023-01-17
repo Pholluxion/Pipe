@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pipe/src/di.dart';
 import 'package:pipe/src/presentation/routes.dart' as routes;
@@ -20,15 +21,21 @@ class NewMettingPage extends StatefulWidget {
 }
 
 class _NewMettingPageState extends State<NewMettingPage> {
+  final ValueNotifier<bool> _isOkRoom = ValueNotifier(false);
   @override
   void initState() {
     log('NEW MET PAGE');
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     di<CameraBloc>().add(const InitCameraEvent(0));
     super.initState();
   }
 
   @override
   void dispose() {
+    _isOkRoom.dispose();
     di<CameraBloc>().add(CloseCameraEvent());
     super.dispose();
   }
@@ -150,27 +157,34 @@ class _NewMettingPageState extends State<NewMettingPage> {
                 );
               },
             ),
-            BlocBuilder<ActionsBloc, ActionsState>(
-              builder: (context, state) {
-                return FloatingActionButton(
-                  heroTag: 'create_room',
-                  backgroundColor: PipeColor.kPipeWhite,
-                  key: const Key('create_room'),
-                  onPressed: () async {
-                    di<ActionsBloc>().add(CreateRoomEvent());
+            ValueListenableBuilder<bool>(
+              valueListenable: _isOkRoom,
+              builder: (ctx, value, child) {
+                return value
+                    ? const CircularProgressIndicator.adaptive()
+                    : BlocBuilder<ActionsBloc, ActionsState>(
+                        builder: (context, state) {
+                          return FloatingActionButton(
+                            heroTag: 'create_room',
+                            backgroundColor: PipeColor.kPipeWhite,
+                            key: const Key('create_room'),
+                            onPressed: () async {
+                              di<ActionsBloc>().add(CreateRoomEvent());
 
-                    if (state.roomId.isNotEmpty) {
-                      di<NavigationService>()
-                          .navigateTo(routes.kConferencePage);
-                    } else {
-                      return;
-                    }
-                  },
-                  child: Icon(
-                    Icons.video_settings,
-                    color: PipeColor.kPipeGreen,
-                  ),
-                );
+                              if (state.roomId.isNotEmpty) {
+                                di<NavigationService>()
+                                    .navigateTo(routes.kConferencePage);
+                              } else {
+                                return;
+                              }
+                            },
+                            child: Icon(
+                              Icons.video_settings,
+                              color: PipeColor.kPipeGreen,
+                            ),
+                          );
+                        },
+                      );
               },
             )
           ],

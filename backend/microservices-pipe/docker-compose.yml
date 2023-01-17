@@ -46,9 +46,9 @@ services:
     container_name: api-gateway
     pull_policy: always
     ports:
-      - "8080:8080"
+      - "80:8080"
     expose:
-      - "8080"
+      - "80"
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
