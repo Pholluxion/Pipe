@@ -70,8 +70,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public String generateToken() {
 
-        String VIDEOSDK_API_KEY = "a314285a-aae7-477d-b7b1-2d1e086e375f";
-        String VIDEOSDK_SECRET_KEY = "669d1ff7109a20b6d723a8265babf5457cb793640425385286165481c5194c9b";
+        String VIDEOSDK_API_KEY = "";
+        String VIDEOSDK_SECRET_KEY = "";
 
         Map<String, Object> payload = new HashMap<>();
 
